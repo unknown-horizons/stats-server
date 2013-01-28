@@ -2,7 +2,7 @@
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 from setup import db, create_app
-from models import Entry, Version, GameStart
+from models import Version, GameStart
 from handlers.gamestart import GamestartHandler
 
 app = create_app(__name__)

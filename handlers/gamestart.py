@@ -2,9 +2,9 @@ from models import Version, GameStart
 from setup import db
 
 class GamestartHandler(object):
-	
+
 	HANDLE = "gamestart"
-	
+
 	def __init__(self, data):
 		version = data['version']
 		uuid = data['uuid']
