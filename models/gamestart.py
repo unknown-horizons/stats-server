@@ -4,7 +4,7 @@ from setup import db
 
 class GameStart(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
-	uuid = db.Column(db.String(36), unique=True)
+	uuid = db.Column(db.String(36))
 	date = db.Column(db.DateTime())
 	version_id = db.Column(db.Integer, db.ForeignKey('version.id'))
 	version = db.relationship("Version", backref=db.backref('gamestarts'))
