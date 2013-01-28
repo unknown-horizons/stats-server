@@ -1,4 +1,4 @@
-from models import Version, GameStart
+from models import Version, GameStart, OSInfo
 from setup import db
 
 class GamestartHandler(object):
@@ -15,6 +15,7 @@ class GamestartHandler(object):
 			db.session.add(new_version)
 		else:
 			new_version = versions[0]
-		gamestart = GameStart(uuid, new_version)
+		os_info = OSInfo.get_os_info(data['system'], data['release'])
+		gamestart = GameStart(uuid, new_version, os_info)
 		db.session.add(gamestart)
 		db.session.commit()

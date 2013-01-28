@@ -1,24 +1,28 @@
 {% extends "layout.html" %}
 {% block body %}
-    <h1>Game Starts</h1>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Version</th>
-                <th>UUID</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for gamestart in gamestarts %}
-            <tr>
-                <td>{{ gamestart.date }}</td>
-                <td>{{ gamestart.version.version }}</td>
-                <td>{{ gamestart.uuid|safe}}</td>
-            </tr>
-        {% else %}
-            <tr><td>Unbelievable.  No entries here so far</td></tr>
-        {% endfor %}
-        </tbody>
-    </table>
+	<h1>Game Starts</h1>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Date</th>
+				<th>Version</th>
+				<th>UUID</th>
+				<th>System</th>
+				<th>Release</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for gamestart in gamestarts %}
+			<tr>
+				<td>{{ gamestart.date }}</td>
+				<td>{{ gamestart.version.version }}</td>
+				<td>{{ gamestart.uuid|safe}}</td>
+				<td>{{ gamestart.osinfo.system|safe}}</td>
+				<td>{{ gamestart.osinfo.release|safe}}</td>
+			</tr>
+		{% else %}
+			<tr><td>Unbelievable.  No entries here so far</td></tr>
+		{% endfor %}
+		</tbody>
+	</table>
 {% endblock %}

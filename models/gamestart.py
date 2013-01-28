@@ -8,11 +8,14 @@ class GameStart(db.Model):
 	date = db.Column(db.DateTime())
 	version_id = db.Column(db.Integer, db.ForeignKey('version.id'))
 	version = db.relationship("Version", backref=db.backref('gamestarts'))
-
-	def __init__(self, uuid, version):
+	osinfo_id = db.Column(db.Integer, db.ForeignKey('os_info.id'))
+	osinfo = db.relationship("OSInfo", backref=db.backref('gamestarts'))
+	
+	def __init__(self, uuid, version, osinfo):
 		self.uuid = uuid
 		self.version = version
 		self.date = datetime.now()
+		self.osinfo = osinfo
 
 	def __repr__(self):
-		return '<GameStart %r>' % self.title
+		return '<GameStart %r %r>' % (self.date, self.version)
