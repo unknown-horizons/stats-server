@@ -1,4 +1,5 @@
 from datetime import datetime
+from itertools import groupby
 
 from setup import db
 
@@ -19,3 +20,12 @@ class GameStart(db.Model):
 
 	def __repr__(self):
 		return '<GameStart %r %r>' % (self.date, self.version)
+		
+		
+	@classmethod
+	def get_grouped_by_day(cls, items):
+		def grouper( item ): 
+			return item.date.year, item.date.month, item.date.day
+		return groupby(items, grouper)
+			
+		
