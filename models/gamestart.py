@@ -5,8 +5,9 @@ from setup import db
 
 class GameStart(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
-	uuid = db.Column(db.String(36))
 	date = db.Column(db.DateTime())
+	uuid_id = db.Column(db.Integer, db.ForeignKey('uuid.uuid'))
+	uuid = db.relationship("Uuid", backref=db.backref('gamestarts'))
 	version_id = db.Column(db.Integer, db.ForeignKey('version.id'))
 	version = db.relationship("Version", backref=db.backref('gamestarts'))
 	osinfo_id = db.Column(db.Integer, db.ForeignKey('os_info.id'))

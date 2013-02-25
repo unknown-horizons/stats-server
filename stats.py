@@ -5,7 +5,7 @@ from datetime import datetime
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 from sqlalchemy.sql import func
 from setup import db, create_app
-from models import Version, GameStart, OSInfo
+from models import Version, GameStart, OSInfo, Uuid, MapStart
 from handlers.gamestart import GamestartHandler
 from handlers.mapstart import MapstartHandler
 from itertools import groupby
@@ -25,7 +25,7 @@ def upload_data():
 		assert isinstance(data, dict) 
 		if not 'uuid' in data:
 			return
-		uuid = data['uuid']
+		uuid = Uuid.create_or_fetch(data['uuid'])
 		for key, data in data.iteritems():
 			if key in handler_mapping:
 				handler_mapping[key](data, uuid)
@@ -48,6 +48,10 @@ def show_gamestarts():
 				
 	return render_template('show_gamestarts.html', gamestarts=gamestart_list, osstats=osstats, startstats=startstats)
 
+@app.route('/mapstarts')
+def show_mapstarts():
+	mapstarts = MapStart.query.all()
+	return render_template('show_mapstarts.html', mapstarts=mapstarts)
 
 def unix_time(dt):
 	epoch = datetime.utcfromtimestamp(0)

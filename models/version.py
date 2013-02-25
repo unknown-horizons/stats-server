@@ -8,4 +8,15 @@ class Version(db.Model):
 		self.version = version
 
 	def __repr__(self):
-		return '<Version %r>' % self.version
+		return '<Version %r>' % self.version		
+	
+	@classmethod
+	def create_or_fetch(cls, version):
+		versions = Version.query.filter_by(version=version).all()
+		new_version = None
+		if len(versions) == 0:
+			new_version = Version(version)
+			db.session.add(new_version)
+		else:
+			new_version = versions[0]
+		return new_version

@@ -1,4 +1,4 @@
-from models import Version, GameStart, OSInfo
+from models import MapStart
 from setup import db
 
 class MapstartHandler(object):
@@ -6,4 +6,8 @@ class MapstartHandler(object):
 	HANDLE = "mapstart"
 
 	def __init__(self, data, uuid):
-		print data
+		mapname = data['map']
+		print "Recording mapstart:", mapname, uuid.uuid
+		mapstart = MapStart(uuid, mapname)
+		db.session.add(mapstart)
+		db.session.commit()

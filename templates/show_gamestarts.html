@@ -1,6 +1,67 @@
 {% extends "layout.html" %}
 {% block body %}
-	<h1>Game Starts {{gamestarts}}</h1>
+	<h1>Game Starts</h1>
+	<div id="chartdiv" style="width:400px; height:400px;"> 
+	</div>
+	<div id="chartdiv2" style="width:400px; height:400px;"> 
+	</div>
+	<script>
+	$(document).ready(function() {
+		var chart = new Highcharts.Chart({
+	
+			chart: {
+				renderTo: 'chartdiv',
+				type: 'pie'
+			},
+			title: {
+				text: 'Starts by Operating System'
+			},
+			series: [{
+				name: 'Game Starts',
+				data: {{ osstats|tojson|safe }}
+			}]
+		});
+	});
+	$(function () {
+		var chart2;
+		$(document).ready(function() {
+			chart2 = new Highcharts.Chart({
+				chart: {
+					renderTo: 'chartdiv2',
+					type: 'spline'
+				},
+				title: {
+					text: 'Gamestarts by day'
+				},
+				subtitle: {
+					text: 'Shows gamestarts per day separated by operating system'
+				},
+				xAxis: {
+					type: 'datetime',
+					dateTimeLabelFormats: { // don't display the dummy year
+						month: '%e. %b',
+						year: '%b'
+					}
+				},
+				yAxis: {
+					title: {
+						text: 'Game Starts'
+					},
+					min: 0
+				},
+				tooltip: {
+					formatter: function() {
+							return '<b>'+ this.series.name +'</b><br/>'+
+							Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y +' m';
+					}
+				},
+				
+				series: {{ startstats|tojson|safe}}
+			});
+		});
+		
+	});
+	</script>
 	<table class="table table-striped">
 		<thead>
 			<tr>
@@ -25,65 +86,4 @@
 		{% endfor %}
 		</tbody>
 	</table>
-	<div id="chartdiv" style="width:400px; height:400px;"> 
-	</div>
-	<div id="chartdiv2" style="width:400px; height:400px;"> 
-	</div>
-		<script>
-		$(document).ready(function() {
-			var chart = new Highcharts.Chart({
-		
-				chart: {
-					renderTo: 'chartdiv',
-					type: 'pie'
-				},
-				title: {
-					text: 'Starts by Operating System'
-				},
-				series: [{
-					name: 'Game Starts',
-					data: {{ osstats|tojson|safe }}
-				}]
-			});
-		});
-		$(function () {
-			var chart2;
-			$(document).ready(function() {
-				chart2 = new Highcharts.Chart({
-					chart: {
-						renderTo: 'chartdiv2',
-						type: 'spline'
-					},
-					title: {
-						text: 'Gamestarts by day'
-					},
-					subtitle: {
-						text: 'Shows gamestarts per day separated by operating system'
-					},
-					xAxis: {
-						type: 'datetime',
-						dateTimeLabelFormats: { // don't display the dummy year
-							month: '%e. %b',
-							year: '%b'
-						}
-					},
-					yAxis: {
-						title: {
-							text: 'Game Starts'
-						},
-						min: 0
-					},
-					tooltip: {
-						formatter: function() {
-								return '<b>'+ this.series.name +'</b><br/>'+
-								Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y +' m';
-						}
-					},
-					
-					series: {{ startstats|tojson|safe}}
-				});
-			});
-			
-		});
-		</script>
 {% endblock %}
