@@ -5,7 +5,7 @@ from datetime import datetime
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 from sqlalchemy.sql import func
 from setup import db, create_app
-from models import Version, GameStart, OSInfo, Uuid, MapStart
+from models import Version, GameStart, OSInfo, Uuid, MapStart, Map
 from handlers.gamestart import GamestartHandler
 from handlers.mapstart import MapstartHandler
 from itertools import groupby
@@ -51,7 +51,14 @@ def show_gamestarts():
 @app.route('/mapstarts')
 def show_mapstarts():
 	mapstarts = MapStart.query.all()
-	return render_template('show_mapstarts.html', mapstarts=mapstarts)
+	maps = Map.query.all()
+	mapdata = {}
+	for map in maps:
+		mapdata[map.mapname] = len(map.mapstarts)
+	mapdata = []
+	for map in maps:
+		mapdata.append([map.mapname, len(map.mapstarts)])
+	return render_template('show_mapstarts.html', mapstarts=mapstarts, mapdata=mapdata)
 
 def unix_time(dt):
 	epoch = datetime.utcfromtimestamp(0)

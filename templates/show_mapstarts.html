@@ -6,13 +6,51 @@
 		<thead>
 			<tr>
 				<th>Mapname</th>
+				<th>Starts</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for map, starts in mapdata %}
+			<tr>
+				<td>{{ map|safe }}</td>
+				<td>{{ starts|safe }}</td>
+			</tr>
+		{% else %}
+			<tr><td>Unbelievable.  No entries here so far</td></tr>
+		{% endfor %}
+		</tbody>
+	</table>
+	<div id="chartdiv" style="width:400px; height:400px;"> 
+	</div>
+	<script>
+	$(document).ready(function() {
+		var chart = new Highcharts.Chart({
+	
+			chart: {
+				renderTo: 'chartdiv',
+				type: 'pie'
+			},
+			title: {
+				text: 'Starts by Operating System'
+			},
+			series: [{
+				name: 'Game Starts',
+				data: {{ mapdata|tojson|safe }}
+			}]
+		});
+	});
+	</script>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Mapname</th>
 				<th>UUID</th>
 			</tr>
 		</thead>
 		<tbody>
 		{% for mapstart in mapstarts %}
 			<tr>
-				<td>{{ mapstart.mapname|safe }}</td>
+				<td>{{ mapstart.mapname.mapname|safe }}</td>
 				<td>{{ mapstart.uuid.uuid|safe }}</td>
 			</tr>
 		{% else %}
