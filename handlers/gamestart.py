@@ -5,9 +5,9 @@ class GamestartHandler(object):
 
 	HANDLE = "gamestart"
 
-	def __init__(self, data):
+	def __init__(self, data, uuid):
+		print "Gamestart registered"
 		version = data['version']
-		uuid = data['uuid']
 		versions = Version.query.filter_by(version=version).all()
 		new_version = None
 		if len(versions) == 0:

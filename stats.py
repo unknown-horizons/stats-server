@@ -7,23 +7,35 @@ from sqlalchemy.sql import func
 from setup import db, create_app
 from models import Version, GameStart, OSInfo
 from handlers.gamestart import GamestartHandler
+from handlers.mapstart import MapstartHandler
 from itertools import groupby
 
 
 app = create_app(__name__)
 
+handler_mapping = {
+    GamestartHandler.HANDLE: GamestartHandler,
+    MapstartHandler.HANDLE: MapstartHandler
+}
+
 @app.route('/upload', methods=['POST'])
 def upload_data():
 	if request.json is not None:
 		data = request.json
-		GamestartHandler(data['gamestart'])
+		assert isinstance(data, dict) 
+		if not 'uuid' in data:
+			return
+		uuid = data['uuid']
+		for key, data in data.iteritems():
+			if key in handler_mapping:
+				handler_mapping[key](data, uuid)
 	else:
 		abort(401)
 	return redirect(url_for('show_gamestarts'))
 
 @app.route('/')
 def show_gamestarts():
-	gamestarts = GameStart.query.all()
+	gamestart_list = GameStart.query.all()
 	osinfos = OSInfo.query.all()
 	osstats = []
 	startstats = []
@@ -34,7 +46,7 @@ def show_gamestarts():
 			entry['data'].append([unix_time(datetime(*dateinfo)), len(list(gamestarts))])
 		startstats.append(entry)
 				
-	return render_template('show_gamestarts.html', gamestarts=gamestarts, osstats=osstats, startstats=startstats)
+	return render_template('show_gamestarts.html', gamestarts=gamestart_list, osstats=osstats, startstats=startstats)
 
 
 def unix_time(dt):
