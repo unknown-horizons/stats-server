@@ -1,7 +1,7 @@
 
 {% extends "layout.html" %}
 {% block body %}
-	<h1>Game Starts</h1>
+	<h1>Map Starts</h1>
 	<table class="table table-striped">
 		<thead>
 			<tr>
@@ -20,21 +20,21 @@
 		{% endfor %}
 		</tbody>
 	</table>
-	<div id="chartdiv" style="width:400px; height:400px;"> 
+	<div id="chartdiv" style="width:400px; height:400px;">
 	</div>
 	<script>
 	$(document).ready(function() {
 		var chart = new Highcharts.Chart({
-	
+
 			chart: {
 				renderTo: 'chartdiv',
 				type: 'pie'
 			},
 			title: {
-				text: 'Starts by Operating System'
+				text: 'Starts by Map'
 			},
 			series: [{
-				name: 'Game Starts',
+				name: 'Map Starts',
 				data: {{ mapdata|tojson|safe }}
 			}]
 		});
